@@ -1,0 +1,56 @@
+# Конфигурация для обучения классификатора бабочек
+
+# Пути к данным
+data:
+  train_csv: "data/dataset/Training_set.csv"
+  train_images_dir: "data/dataset/train"
+  test_csv: "data/dataset/Testing_set.csv"
+  test_images_dir: "data/dataset/test"
+
+# Параметры DataModule
+datamodule:
+  batch_size: 32
+  num_workers: 4
+  val_split: 0.2
+
+# Параметры модели
+model:
+  model_name: "resnet50"  # resnet18, resnet50, resnet101, efficientnet_b0
+  pretrained: true
+  learning_rate: 0.001
+  weight_decay: 0.0001
+  scheduler: "reduce_on_plateau"  # reduce_on_plateau, cosine
+
+# Параметры обучения
+trainer:
+  max_epochs: 2
+  precision: 16  # mixed precision для ускорения
+  accelerator: "auto"  # auto выберет GPU если доступен
+  devices: "auto"
+  log_every_n_steps: 50
+  check_val_every_n_epoch: 1
+
+# Early stopping
+early_stopping:
+  monitor: "val/loss"
+  patience: 10
+  mode: "min"
+
+# Model checkpoint
+checkpoint:
+  monitor: "val/accuracy"
+  mode: "max"
+  save_top_k: 3
+  filename: "butterfly-classifier-{epoch:02d}-{val/accuracy:.4f}"
+
+# Логирование
+logging:
+  project_name: "butterfly-classification"
+  experiment_name: "resnet50-baseline"
+  log_dir: "outputs/mlruns"
+  save_dir: "outputs/checkpoints"
+  mlflow_tracking_uri: "http://127.0.0.1:8080"
+  plots_dir: "plots"
+
+# Seed для воспроизводимости
+seed: 69

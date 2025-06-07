@@ -2,7 +2,27 @@
 __pycache__/
 *.py[cod]
 *$py.class
-
+*.onnx
+*.ckpt
+*.pth
+*.pt
+*.engine
+*.trt
+*.pth.tar
+*.pth.tar.gz
+mlartifacts
+outputs/
+predictions/
+data/dataset/
+*.csv
+*.jpg
+*.jpeg
+*.png
+*.gif
+*.bmp
+*.tiff
+*.ico
+data/predictions/
 # C extensions
 *.so
 
@@ -174,9 +194,9 @@ cython_debug/
 .abstra/
 
 # Visual Studio Code
-#  Visual Studio Code specific template is maintained in a separate VisualStudioCode.gitignore 
+#  Visual Studio Code specific template is maintained in a separate VisualStudioCode.gitignore
 #  that can be found at https://github.com/github/gitignore/blob/main/Global/VisualStudioCode.gitignore
-#  and can be added to the global gitignore or merged into this file. However, if you prefer, 
+#  and can be added to the global gitignore or merged into this file. However, if you prefer,
 #  you could uncomment the following to ignore the enitre vscode folder
 # .vscode/
 
@@ -192,3 +212,17 @@ cython_debug/
 #  refer to https://docs.cursor.com/context/ignore-files
 .cursorignore
 .cursorindexingignore
+
+# Plots and temporary visualization files
+plots/*.png
+plots/*.txt
+plots/*.jpg
+plots/*.jpeg
+
+# Temporary MLflow files
+.mlruns/
+mlruns/
+
+# MLflow server files
+mlflow.pid
+mlflow.log

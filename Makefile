@@ -1,19 +1,19 @@
 MANAGER = poetry run
 DEVICE = 'cuda:0'
-
+MLFLOW_PORT = 8080
+MLFLOW_HOST = 127.0.0.1
+download-dataset:
+	${MANAGER} python butterfly_classification/download_dataset.py
 format:
 	${MANAGER} isort butterfly_classification
 	${MANAGER} black butterfly_classification
-
+run-mlflow-server:
+	${MANAGER} mlflow server --default-artifact-root ./mlruns --host ${MLFLOW_HOST} --port ${MLFLOW_PORT}
 run-train:
+	${MANAGER} python butterfly_classification/train_pipeline/train.py
 run-inference-pipeline:
-dd:
-	@dvc remote modify multimodal_embeddings --local access_key_id $(DVC_ACCESS_KEY_ID)
-	@dvc remote modify multimodal_embeddings --local secret_access_key $(DVC_SECRET_ACCESS_KEY)
-	@dvc config core.no_scm true
-ddvc-model: dd
-	dvc pull
-ddvc-dataset: dd
-	dvc pull
+	${MANAGER} python butterfly_classification/inference/predict.py
 pre-commit-install:
 	${MANAGER} pre-commit install
+run-conversion-pipeline:
+	${MANAGER} python butterfly_classification/model_conversion_pipeline/pipeline.py

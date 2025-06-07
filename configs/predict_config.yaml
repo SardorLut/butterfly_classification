@@ -1,0 +1,30 @@
+# Конфигурация для предсказаний классификатора бабочек
+
+# Модель
+model:
+  checkpoint_path: "outputs/checkpoints/final_model.ckpt"
+
+# Данные для предсказаний
+data:
+  test_csv: "data/dataset/Testing_set.csv"
+  test_images_dir: "data/dataset/test"
+  single_image: null  # Путь к одному изображению (опционально)
+
+# Выходные файлы
+output:
+  output_dir: "data/predictions"
+  create_submission: true
+  create_probabilities: true
+  create_detailed_results: true
+
+# Обработка
+processing:
+  batch_size: 32  # Для batch предсказаний (если понадобится)
+  device: "auto"  # auto, cpu, cuda, mps
+  show_progress: true
+
+# Логирование
+logging:
+  verbose: true
+  show_statistics: true
+  top_k_stats: 10  # Сколько топ классов показать в статистике
