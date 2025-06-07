@@ -7,9 +7,9 @@
 Классификатор способен определить вид бабочки по фотографии из 75 возможных классов. Система построена с использованием современных практик MLOps и готова к развертыванию в продакшене.
 
 **Основные возможности:**
-- Обучение моделей на базе предобученных ResNet архитектур
+- Обучение моделей на базе предобученных ResNet архитектур(Resnet[18,50,101])
 - Автоматическое логирование экспериментов в MLflow
-- Управление данными через DVC
+- Скачивание данных через скрипт
 - Экспорт моделей в ONNX и TensorRT для оптимизированного инференса
 - Настраиваемые конфигурации через Hydra
 - Качественный код с pre-commit хуками
@@ -64,8 +64,7 @@ make setup-precommit
 ### 4. Загрузка данных
 
 ```bash
-# Загрузка данных через DVC
-make download-data
+make download-dataset
 ```
 
 ### 5. Запуск MLflow сервера
@@ -78,7 +77,7 @@ make mlflow-server
 ## Train
 
 ### Быстрый старт обучения
-
+запустить mlflow сервер через make run-mlflow-server
 ```bash
 # Обучение с дефолтными параметрами
 make train
@@ -88,13 +87,8 @@ make train-custom model.model_name=resnet101 trainer.max_epochs=50
 ```
 
 ### Доступные команды обучения
-
+доступны в конфиге
 ```bash
-# Быстрое обучение (2 эпохи, для тестирования)
-make train-fast
-
-# Полное обучение с лучшими параметрами
-make train-full
 
 # Обучение с конкретной конфигурацией
 python -m butterfly_classification.train_pipeline.train \
@@ -157,14 +151,8 @@ outputs/
 ### Предсказания для тестового набора
 
 ```bash
-# Инференс с Lightning моделью
+# Инференс с моделью
 make predict
-
-# Инференс с ONNX моделью
-make predict-onnx
-
-# Инференс с TensorRT моделью
-make predict-tensorrt
 ```
 
 ### Предсказание для одного изображения
@@ -220,29 +208,23 @@ butterfly2.jpg,SWALLOWTAIL
 ```bash
 # Установка и настройка
 make install              # Установка зависимостей
-make setup-precommit      # Настройка pre-commit
+make pre-commit-install     # Настройка pre-commit
 make download-data        # Загрузка данных через DVC
 
 # Обучение
 make train               # Обучение с дефолтными параметрами
-make train-fast          # Быстрое обучение (2 эпохи)
-make train-full          # Полное обучение (100 эпох)
 
 # Конвертация моделей
 make convert-onnx        # Конвертация в ONNX
 make convert-tensorrt    # Конвертация в TensorRT
 
 # Инференс
-make predict             # Предсказания (Lightning)
-make predict-onnx        # Предсказания (ONNX)
-make predict-tensorrt    # Предсказания (TensorRT)
-make predict-single      # Предсказание одного изображения
+make run-inference-pipeline             # Предсказания (Lightning)make predict-tensorrt
 
 # Утилиты
 make mlflow-server       # Запуск MLflow сервера
 make clean              # Очистка временных файлов
-make lint               # Проверка качества кода
-make test               # Запуск тестов
+make format             # Запуск линтеров
 ```
 
 ## Конфигурация
@@ -280,36 +262,6 @@ python -m butterfly_classification.train_pipeline.train \
 - CUDA 11.0+
 - TensorRT 8.0+
 
-## Устранение неполадок
-
-**Ошибка памяти GPU:**
-```bash
-# Уменьшите batch_size в конфигурации
-python -m butterfly_classification.train_pipeline.train datamodule.batch_size=16
-```
-
-**Проблемы с установкой зависимостей:**
-```bash
-# Переустановка окружения
-make clean
-make install
-```
-
-**Проблемы с DVC:**
-```bash
-# Проверка статуса DVC
-dvc status
-dvc pull --force
-```
-
 ## Лицензия
 
 MIT License
-
-## Поддержка
-
-При возникновении проблем:
-1. Проверьте секцию "Устранение неполадок"
-2. Убедитесь, что все зависимости установлены: `make install`
-3. Проверьте статус данных: `dvc status`
-4. Создайте Issue в репозитории с описанием проблемы
