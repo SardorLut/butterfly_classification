@@ -2,6 +2,8 @@ MANAGER = poetry run
 DEVICE = 'cuda:0'
 MLFLOW_PORT = 8080
 MLFLOW_HOST = 127.0.0.1
+install:
+	${MANAGER} poetry install --with dev,gpu,conversion,lint,test
 download-dataset:
 	${MANAGER} python butterfly_classification/download_dataset.py
 format:
